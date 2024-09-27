@@ -4,28 +4,23 @@ import numpy as np
 import datetime as dt
 from sqlalchemy import create_engine, func
 from sqlalchemy.ext.automap import automap_base
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
 
 #################################################
 # Database Setup
 #################################################
-engine = create_engine("sqlite:///hawaii.sqlite")
+engine = create_engine("sqlite:///Resources/hawaii.sqlite")
 
 # Reflect an existing database into a new model
 Base = automap_base()
-
-# Reflect the tables using the engine
 Base.prepare(autoload_with=engine)
 
-# Print out the classes to check the table names
-print(Base.classes.keys())
-
-# Save references to each table using the correct names based on the print output
-measurement = Base.classes.hawaii_measurement  # Replace with the correct name
-station = Base.classes.hawaii_station  # Replace with the correct name
+# Save references to each table
+Measurement = Base.classes.measurement
+Station = Base.classes.station
 
 # Create our session (link) from Python to the DB
-session = Session(engine)
+Session = sessionmaker(bind=engine)
 
 #################################################
 # Flask Setup
